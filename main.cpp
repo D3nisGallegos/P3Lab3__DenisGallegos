@@ -1,12 +1,15 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <ctime>
 
 using namespace std; 
 
 int menu(); 
 
 void arreglodescomprimido(char*, int );
+
+void crearmatriz(int, int, int);
 
 int main(int argc, char** argv) {
 	
@@ -36,12 +39,31 @@ int main(int argc, char** argv) {
 					arreglo [c] = caracter; 
 				}
 				arreglodescomprimido(arreglo, indice);
+				delete[] arreglo;
 				cout << "-------FINAL EJERCICIO 1------" <<endl; 
 				break; 
 				}
 			case 2:
 				{
 				cout << "-------EJERCICIO 2------" <<endl; 
+				int filas = 0; 
+				int columnas = 0; 
+				int piedras =0;
+				bool v = false; 
+				while (v == false){
+					cout << " Ingrese la cantidad de filas: (entero mayor a 0)" <<endl;
+					cin >> filas;  
+					cout << " Ingrese la cantidad de columnas: (entero mayor a 0)" <<endl;
+					cin >> columnas; 
+					cout << " Ingrese la cantidad de obstaculos: (entero mayor a 0)" <<endl;
+					cin >> piedras; 
+					if (filas <= 0 || columnas <= 0 || (piedras > (filas * columnas))){
+						cout << "Valores ingresados invalidos." <<endl; 
+					}else {
+						v = true; 
+					}
+					crearmatriz(filas, columnas, piedras);
+				}//Fin del while.
 				
 				cout << "-------FINAL EJERCICIO 2------" <<endl; 
 				break; 
@@ -98,9 +120,7 @@ void arreglodescomprimido(char* arreglo, int indice){
 				}else {
 					string h = acum1+elemento+""; 
 					int n = atoi(h.c_str());
-					indicenumeros++;
-					cout << "n: "<<n; 
-					cout << "num: " <<num;  
+					indicenumeros++; 
 					num += h +";";    
 					indice2 += n;
 					acum1 = "";
@@ -117,14 +137,12 @@ void arreglodescomprimido(char* arreglo, int indice){
 	letras = new char[indiceletras];  
 	int iterador = 0; 
 	string cadena = "";
-	cout << num; 
 	for (char elem: num){  
 		int ascii = elem; 
 		if (ascii != 59){
 			cadena += elem; 
 		}else {
 			numeros [iterador] = atoi(cadena.c_str());
-			cout << numeros [iterador] << " "; 
 			cadena = "";
 			iterador++; 
 		}
@@ -145,8 +163,8 @@ void arreglodescomprimido(char* arreglo, int indice){
 		}
 		iterador4++;
 	}
-	
-	
+	delete[] numeros;
+	delete[] letras;
 	cout << "["; 
 	for (int c = 0; c < indice2;c++){
 		cout << comprimir [c] << " ";
@@ -158,7 +176,52 @@ void arreglodescomprimido(char* arreglo, int indice){
 	 
 }
 
-
+void crearmatriz(int filas, int columnas, int piedras){
+	char** matriz = 0; 
+	matriz = new char* [filas];
+	for(int c = 0; c < filas;c++){
+		matriz[c] = new char[columnas];
+		//matriz[1][1] = '#';
+	}
+	bool v = false; 
+	int contar = 0; 
+	srand(time(NULL));
+	while (v == false){
+		int num = 1 + rand() % (filas);
+		int num2 = 1 + rand() % (columnas);
+		if (num >= filas || num2 >= columnas || contar == piedras){
+			if (contar == piedras){
+				v = true; 
+			}
+		}else {
+			char elem = matriz [num][num2];
+			if (elem == '#'){
+				
+			}else {
+				matriz [num][num2] = '#'; 
+				contar++; 
+			}
+		}
+	}
+	for(int c = 0; c < filas; c++){	
+		for(int j= 0; j < columnas;j++){
+			char elem = matriz [c][j];
+			if (elem == '#'){
+				
+			}else{
+				matriz[c][j] = '-';
+			}
+		}	
+	}
+	
+	for(int c = 0; c < filas; c++){	
+		for(int j= 0; j < columnas;j++){
+			cout << matriz [c][j] << " ";
+		}	
+		cout <<endl; 
+	}
+	
+}
 
 
 
