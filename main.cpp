@@ -7,9 +7,11 @@ using namespace std;
 
 int menu(); 
 
-void arreglodescomprimido(char*, int );
+char* arreglodescomprimido(char*, int );
 
-void crearmatriz(int, int, int);
+char** crearmatriz(int, int, int);
+
+char** secuencia(char*, char**, int, int, int, int , int);
 
 int main(int argc, char** argv) {
 	
@@ -38,8 +40,10 @@ int main(int argc, char** argv) {
 					cin >> caracter; 
 					arreglo [c] = caracter; 
 				}
-				arreglodescomprimido(arreglo, indice);
+				char* nuevo;
+				nuevo = arreglodescomprimido(arreglo, indice);
 				delete[] arreglo;
+				delete [] nuevo; 
 				cout << "-------FINAL EJERCICIO 1------" <<endl; 
 				break; 
 				}
@@ -62,16 +66,87 @@ int main(int argc, char** argv) {
 					}else {
 						v = true; 
 					}
-					crearmatriz(filas, columnas, piedras);
 				}//Fin del while.
-				
+				char** matriz; 
+				matriz = crearmatriz(filas, columnas, piedras);
+				for(int i = 0; i<filas;i++){
+					if(matriz[i]){
+						delete[] matriz[i];
+						matriz[i] = 0; 
+					}
+				}
+				if( matriz != NULL ){
+					delete[] matriz;
+					matriz = 0;
+				}
+				if(matriz){
+					delete[] matriz;
+					matriz = 0;
+				}
 				cout << "-------FINAL EJERCICIO 2------" <<endl; 
 				break; 
 				}
 			case 3: 
 				{
 				cout << "-------EJERCICIO 3------" <<endl; 
-				
+				int indice = 0;
+				bool v = false; 
+				while (v == false){
+					cout << " Ingrese la cantidad de elementos del arreglo: (entero mayor a 0)" <<endl;
+					cin >> indice;  
+					if (indice <= 0){
+						cout << "Indice ingresado invalido." <<endl; 
+					}else {
+						v = true; 
+					}
+				}//Fin del while.
+				char* arreglo; 
+				arreglo = new char[indice];
+				char caracter;  
+				for (int c =0; c < indice;c++){
+					cout << "Ingrese el caracter para el elemento " << c << ":" <<endl; 
+					cin >> caracter; 
+					arreglo [c] = caracter; 
+				}
+				int filas = 0; 
+				int columnas = 0; 
+				int piedras =0;
+				bool v2 = false; 
+				while (v2 == false){
+					cout << " Ingrese la cantidad de filas: (entero mayor a 0)" <<endl;
+					cin >> filas;  
+					cout << " Ingrese la cantidad de columnas: (entero mayor a 0)" <<endl;
+					cin >> columnas; 
+					cout << " Ingrese la cantidad de obstaculos: (entero mayor a 0)" <<endl;
+					cin >> piedras; 
+					if (filas <= 0 || columnas <= 0 || (piedras > (filas * columnas))){
+						cout << "Valores ingresados invalidos." <<endl; 
+					}else {
+						v2 = true; 
+					}
+				}
+				int fila = 0; 
+				int columna = 0;
+				char* arreglo2 = arreglodescomprimido(arreglo, indice);
+				char** matriz = crearmatriz(filas, columnas, piedras);
+				bool v3 = false; 
+				while (v3 == false){
+					cout << " Ingrese la fila para comenzar: (entero mayor a 0)" <<endl;
+					cin >> fila;  
+					cout << " Ingrese la columna para comenzar: (entero mayor a 0)" <<endl;
+					cin >> columna; 
+					if (filas <=  fila || columnas <= columna){
+						cout << "Valores ingresados invalidos." <<endl; 
+					}else {
+						char elem = matriz [fila][columna]; 
+						if (elem == '#'){
+							cout << "Valores ingresados invalidos." <<endl; 
+						}else{
+							v3 = true; 
+						}
+					}
+				}
+				char** matrizsecuencia = secuencia(arreglo2, matriz, fila, columna, filas, columnas, indice);
 				cout << "-------FINAL EJERCICIO 3------" <<endl; 	
 				break; 
 				}
@@ -102,7 +177,7 @@ int menu(){
 	return opcion; 
 }
 
-void arreglodescomprimido(char* arreglo, int indice){
+char* arreglodescomprimido(char* arreglo, int indice){
 	int indice2 = 0;
 	string acum1 = ""; 
 	int indicenumeros = 0; 
@@ -169,14 +244,14 @@ void arreglodescomprimido(char* arreglo, int indice){
 	for (int c = 0; c < indice2;c++){
 		cout << comprimir [c] << " ";
 	}
-	cout << "]"; 
-	
+	cout << "]"<<endl; 
+	return comprimir; 
 	
 	
 	 
 }
 
-void crearmatriz(int filas, int columnas, int piedras){
+char** crearmatriz(int filas, int columnas, int piedras){
 	char** matriz = 0; 
 	matriz = new char* [filas];
 	for(int c = 0; c < filas;c++){
@@ -220,10 +295,61 @@ void crearmatriz(int filas, int columnas, int piedras){
 		}	
 		cout <<endl; 
 	}
-	
+	return matriz; 
 }
 
-
+char** secuencia(char* arreglo, char** matriz, int fila, int columna, int filas, int columnas, int indice){
+	int comienzo = 0; 
+	for (int h = 0; h < indice;h++){
+		char elem = arreglo [h];
+		for (int c = 0; c < filas;c++){
+			for (int j = 0; j < columnas;j++){
+				if (elem == 'U'){
+					if (comienzo == 0){
+						matriz [c][j] = 186;
+					}else if (arreglo [h- 1] == 'L'){
+						matriz [c][j] = 186; 
+						matriz [c+1][j] = 200; 
+					}else if (arreglo [h- 1] == 'R'){
+						matriz [c][j] = 186; 
+						matriz [c+1][j] = 188; 
+					}
+				}else if (elem == 'D'){
+					if (comienzo == 0){
+						matriz [c][j] = 186;
+					}else if (arreglo [h- 1] == 'L'){
+						matriz [c][j] = 186; 
+						matriz [c-1][j] = 201; 
+					}else if (arreglo [h- 1] == 'R'){
+						matriz [c][j] = 186; 
+						matriz [c-1][j] = 187; 
+					}	
+				}else if (elem == 'L'){
+					if (comienzo == 0){
+						matriz [c][j] = 205;
+					}else if (arreglo [h- 1] == 'U'){
+						matriz [c][j] = 205; 
+						matriz [c-1][j] = 187; 
+					}else if (arreglo [h- 1] == 'D'){
+						matriz [c][j] = 205; 
+						matriz [c-1][j] = 188; 
+					}
+				}else if (elem == 'R'){ 
+					if (comienzo == 0){
+						matriz [c][j] = 205;
+					}else if (arreglo [h- 1] == 'U'){
+						matriz [c][j] = 205; 
+						matriz [c-1][j] = 201; 
+					}else if (arreglo [h- 1] == 'D'){
+						matriz [c][j] = 205; 
+						matriz [c-1][j] = 200; 
+					}
+				}
+				comienzo++; 
+			}
+		}
+	}
+}
 
 
 
