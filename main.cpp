@@ -147,6 +147,35 @@ int main(int argc, char** argv) {
 					}
 				}
 				char** matrizsecuencia = secuencia(arreglo2, matriz, fila, columna, filas, columnas, indice);
+				delete[] arreglo2; 
+				for(int i = 0; i<filas;i++){
+					if(matriz[i]){
+						delete[] matriz[i];
+						matriz[i] = 0; 
+					}
+				}
+				if( matriz != NULL ){
+					delete[] matriz;
+					matriz = 0;
+				}
+				if(matriz){
+					delete[] matriz;
+					matriz = 0;
+				}
+				for(int i = 0; i<filas;i++){
+					if(matrizsecuencia[i]){
+						delete[] matrizsecuencia[i];
+						matriz[i] = 0; 
+					}
+				}
+				if( matrizsecuencia != NULL ){
+					delete[] matrizsecuencia;
+					matriz = 0;
+				}
+				if(matrizsecuencia){
+					delete[] matrizsecuencia;
+					matriz = 0;
+				}
 				cout << "-------FINAL EJERCICIO 3------" <<endl; 	
 				break; 
 				}
@@ -300,55 +329,77 @@ char** crearmatriz(int filas, int columnas, int piedras){
 
 char** secuencia(char* arreglo, char** matriz, int fila, int columna, int filas, int columnas, int indice){
 	int comienzo = 0; 
+	int mover = 0; 
 	for (int h = 0; h < indice;h++){
 		char elem = arreglo [h];
+		mover = 0; 
 		for (int c = 0; c < filas;c++){
 			for (int j = 0; j < columnas;j++){
-				if (elem == 'U'){
+				if (elem == 'U' && mover == 0){
 					if (comienzo == 0){
+						comienzo++; 
 						matriz [c][j] = 186;
 					}else if (arreglo [h- 1] == 'L'){
 						matriz [c][j] = 186; 
-						matriz [c+1][j] = 200; 
+						matriz [c+1][j] = 200;
+						break;  
 					}else if (arreglo [h- 1] == 'R'){
 						matriz [c][j] = 186; 
 						matriz [c+1][j] = 188; 
+						break; 
 					}
-				}else if (elem == 'D'){
+				}else if (elem == 'D' && mover ==0){
 					if (comienzo == 0){
+						comienzo++; 
 						matriz [c][j] = 186;
 					}else if (arreglo [h- 1] == 'L'){
 						matriz [c][j] = 186; 
 						matriz [c-1][j] = 201; 
+						break; 
 					}else if (arreglo [h- 1] == 'R'){
 						matriz [c][j] = 186; 
 						matriz [c-1][j] = 187; 
+						break;
 					}	
-				}else if (elem == 'L'){
+				}else if (elem == 'L' && mover ==0){
 					if (comienzo == 0){
+						comienzo++; 
 						matriz [c][j] = 205;
 					}else if (arreglo [h- 1] == 'U'){
 						matriz [c][j] = 205; 
-						matriz [c-1][j] = 187; 
+						matriz [c][j-1] = 187; 
+						break; 
 					}else if (arreglo [h- 1] == 'D'){
 						matriz [c][j] = 205; 
-						matriz [c-1][j] = 188; 
+						matriz [c][j-1] = 188; 
+						break; 
 					}
-				}else if (elem == 'R'){ 
+				}else if (elem == 'R' && mover ==0){ 
 					if (comienzo == 0){
 						matriz [c][j] = 205;
-					}else if (arreglo [h- 1] == 'U'){
+						comienzo++; 
+					}else if (arreglo [h - 1] == 'U'){
 						matriz [c][j] = 205; 
-						matriz [c-1][j] = 201; 
+						matriz [c][j-1] = 201;
+						break; 
 					}else if (arreglo [h- 1] == 'D'){
 						matriz [c][j] = 205; 
-						matriz [c-1][j] = 200; 
+						matriz [c][j-1] = 200; 
+						break; 
 					}
 				}
-				comienzo++; 
+				mover++; 
 			}
 		}
+		for(int c = 0; c < filas; c++){	
+			for(int j= 0; j < columnas;j++){
+				cout << matriz [c][j] << " ";
+			}	
+			cout <<endl; 
+			cout << endl; 
+		}
 	}
+	return matriz; 
 }
 
 
